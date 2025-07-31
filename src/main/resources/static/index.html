@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Skill Matrix Dashboard - Enhanced</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            color: #555;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid #e1e8ed;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, select, button {
+            padding: 12px 15px;
+            margin: 5px 0;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        input[type="text"], input[type="email"], select {
+            width: 250px;
+        }
+
+        input:focus, select:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .skillGroup {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #51cf66, #40c057);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 5px 15px rgba(81, 207, 102, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(45deg, #ffd43b, #fab005);
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            box-shadow: 0 5px 15px rgba(255, 212, 59, 0.4);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            border: 1px solid #e1e8ed;
+            padding: 15px 12px;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e3f2fd;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border: none;
+            width: 500px;
+            max-width: 90%;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #667eea;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-buttons button {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .alert-success {
+            color: #155724;
+            background: linear-gradient(45deg, #d4edda, #c3e6cb);
+            border-left: 4px solid #28a745;
+        }
+
+        .alert-danger {
+            color: #721c24;
+            background: linear-gradient(45deg, #f8d7da, #f5c6cb);
+            border-left: 4px solid #dc3545;
+        }
+
+        .debug-info {
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online {
+            background-color: #51cf66;
+            animation: pulse 2s infinite;
+        }
+
+        .status-offline {
+            background-color: #ff6b6b;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .skill-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            margin: 2px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .loading:after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #667eea;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <h1><span class="status-indicator status-online"></span>Skill Matrix Management System</h1>
+
+    <!-- Alert Messages -->
+    <div id="alertContainer"></div>
+
+    <!-- Connection Status -->
+    <div class="container">
+        <h2>System Status</h2>
+        <div id="connectionStatus">
+            <div class="loading">Checking connection...</div>
+        </div>
+    </div>
+
+    <!-- Add Employee Section -->
+    <div class="container">
+        <h2>Add Employee with Skills</h2>
+        <form id="employeeForm">
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" id="name" required placeholder="Enter employee name">
+            </div>
+
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="email" required placeholder="Enter employee email">
+            </div>
+
+            <div id="skillsSection">
+                <h3>Skills</h3>
+                <div class="skillGroup">
+                    <input type="text" class="skillName" placeholder="Skill name" required>
+                    <select class="skillProficiency">
+                        <option value="BEGINNER">Beginner</option>
+                        <option value="INTERMEDIATE">Intermediate</option>
+                        <option value="EXPERT">Expert</option>
+                    </select>
+                    <button type="button" class="btn-danger" onclick="removeSkill(this)">Remove</button>
+                </div>
+            </div>
+
+            <button type="button" onclick="addSkill()">+ Add More Skill</button><br><br>
+            <button type="submit" class="btn-success">Add Employee</button>
+        </form>
+    </div>
+
+    <!-- Debug & Test Section -->
+    <div class="container">
+        <h2>Debug & Testing Tools</h2>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+            <button onclick="checkConnection()">Test Connection</button>
+            <button onclick="loadDebugInfo()">Load Debug Stats</button>
+            <button onclick="createTestEmployee()">Create Test Employee</button>
+            <button onclick="testSkillCreation()">Test Skill Creation</button>
+            <button onclick="clearAllData()" class="btn-danger">Clear All Data</button>
+        </div>
+        <div id="debugInfo"></div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="container">
+        <h2>Search Employees</h2>
+        <div class="search-container">
+            <input type="text" id="skillSearch" placeholder="Search by skill name">
+            <select id="proficiencyFilter">
+                <option value="">All Proficiency Levels</option>
+                <option value="BEGINNER">Beginner</option>
+                <option value="INTERMEDIATE">Intermediate</option>
+                <option value="EXPERT">Expert</option>
+            </select>
+            <button onclick="searchBySkill()">Search by Skill</button>
+
+            <input type="text" id="nameSearch" placeholder="Search by employee name">
+            <button onclick="searchByName()">Search by Name</button>
+
+            <button onclick="showAllEmployees()">Show All</button>
+        </div>
+    </div>
+
+    <!-- Skill Matrix Dashboard -->
+    <div class="container">
+        <h2>Skill Matrix Dashboard</h2>
+        <div id="employeeTableContainer">
+            <table id="employeeTable">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Skills</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Employee Modal -->
+<div id="editEmployeeModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editEmployeeModal')">&times;</span>
+        <h3>Edit Employee</h3>
+        <form id="editEmployeeForm">
+            <input type="hidden" id="editEmployeeId">
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" id="editName" required>
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="editEmail" required>
+            </div>
+            <button type="submit" class="btn-success">Update Employee</button>
+        </form>
+    </div>
+</div>
+
+<!-- Manage Skills Modal -->
+<div id="manageSkillsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('manageSkillsModal')">&times;</span>
+        <h3>Manage Employee Skills</h3>
+        <div id="currentEmployeeName"></div>
+        <input type="hidden" id="manageEmployeeId">
+
+        <!-- Add New Skill -->
+        <div class="form-group">
+            <h4>Add New Skill</h4>
+            <input type="text" id="newSkillName" placeholder="Skill name">
+            <select id="newSkillProficiency">
+                <option value="BEGINNER">Beginner</option>
+                <option value="INTERMEDIATE">Intermediate</option>
+                <option value="EXPERT">Expert</option>
+            </select>
+            <button onclick="addSkillToEmployee()" class="btn-success">Add Skill</button>
+        </div>
+
+        <!-- Current Skills -->
+        <div id="currentSkillsList"></div>
+    </div>
+</div>
+
+<script>
+    let allEmployees = [];
+    let systemStatus = {
+        connected: false,
+        lastCheck: null,
+        apiEndpoint: '/api'
+    };
+
+    // Enhanced alert system
+    function showAlert(message, type = 'success', duration = 5000) {
+        const alertContainer = document.getElementById('alertContainer');
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type}`;
+        alertDiv.innerHTML = `
+            <strong>${type === 'success' ? '✓' : '✗'}</strong> ${message}
+            <button onclick="this.parentElement.remove()" style="float: right; background: none; border: none; color: inherit; cursor: pointer;">&times;</button>
+        `;
+
+        alertContainer.appendChild(alertDiv);
+
+        setTimeout(() => {
+            if (alertDiv.parentElement) {
+                alertDiv.remove();
+            }
+        }, duration);
+    }
+
+    // Connection checking
+    async function checkConnection() {
+        const statusDiv = document.getElementById('connectionStatus');
+        statusDiv.innerHTML = '<div class="loading">Testing connection...</div>';
+
+        try {
+            const response = await fetch('/api/employees');
+            if (response.ok) {
+                systemStatus.connected = true;
+                systemStatus.lastCheck = new Date();
+                statusDiv.innerHTML = `
+                    <div style="color: #51cf66;">
+                        <span class="status-indicator status-online"></span>
+                        <strong>Connected</strong> - API is responding (${response.status})
+                        <br><small>Last checked: ${systemStatus.lastCheck.toLocaleTimeString()}</small>
+                    </div>
+                `;
+                showAlert('Connection successful!', 'success');
+            } else {
+                throw new Error(`HTTP ${response.status}`);
+            }
+        } catch (error) {
+            systemStatus.connected = false;
+            systemStatus.lastCheck = new Date();
+            statusDiv.innerHTML = `
+                <div style="color: #ff6b6b;">
+                    <span class="status-indicator status-offline"></span>
+                    <strong>Connection Failed</strong> - ${error.message}
+                    <br><small>Last checked: ${systemStatus.lastCheck.toLocaleTimeString()}</small>
+                </div>
+            `;
+            showAlert(`Connection failed: ${error.message}`, 'danger');
+        }
+    }
+
+    // Enhanced skill management
+    function addSkill() {
+        const skillsSection = document.getElementById("skillsSection");
+        const skillGroup = document.createElement("div");
+        skillGroup.classList.add("skillGroup");
+        skillGroup.innerHTML = `
+            <input type="text" class="skillName" placeholder="Skill name" required>
+            <select class="skillProficiency">
+                <option value="BEGINNER">Beginner</option>
+                <option value="INTERMEDIATE">Intermediate</option>
+                <option value="EXPERT">Expert</option>
+            </select>
+            <button type="button" class="btn-danger" onclick="removeSkill(this)">Remove</button>
+        `;
+        skillsSection.appendChild(skillGroup);
+    }
+
+    function removeSkill(button) {
+        // Don't remove if it's the only skill group
+        const skillGroups = document.querySelectorAll('.skillGroup');
+        if (skillGroups.length > 1) {
+            button.parentElement.remove();
+        } else {
+            showAlert('At least one skill is required', 'danger');
+        }
+    }
+
+    // Enhanced form submission
+    document.getElementById('employeeForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+
+        if (!name || !email) {
+            showAlert('Name and email are required', 'danger');
+            return;
+        }
+
+        const skillNames = document.querySelectorAll('.skillName');
+        const skillProfs = document.querySelectorAll('.skillProficiency');
+
+        const skills = [];
+        for (let i = 0; i < skillNames.length; i++) {
+            const skillName = skillNames[i].value.trim();
+            const proficiency = skillProfs[i].value;
+            if (skillName) {
+                skills.push({ name: skillName, proficiency: proficiency });
+            }
+        }
+
+        if (skills.length === 0) {
+            showAlert('At least one skill is required', 'danger');
+            return;
+        }
+
+        const employeeData = { name, email, skills };
+
+        console.log('🚀 Submitting employee data:', JSON.stringify(employeeData, null, 2));
+
+        try {
+            const response = await fetch('/api/employees', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(employeeData)
+            });
+
+            console.log('📡 Response status:', response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('❌ Error response:', errorText);
+                throw new Error(errorText);
+            }
+
+            const result = await response.json();
+            console.log('✅ Success response:', result);
+
+            showAlert(`Employee "${name}" added successfully with ${skills.length} skill(s)!`, 'success');
+            document.getElementById('employeeForm').reset();
+            resetSkillsSection();
+            await loadEmployees();
+
+        } catch (error) {
+            console.error('💥 Error adding employee:', error);
+            showAlert(`Error adding employee: ${error.message}`, 'danger');
+        }
+    });
+
+    function resetSkillsSection() {
+        document.getElementById('skillsSection').innerHTML = `
+            <h3>Skills</h3>
+            <div class="skillGroup">
+                <input type="text" class="skillName" placeholder="Skill name" required>
+                <select class="skillProficiency">
+                    <option value="BEGINNER">Beginner</option>
+                    <option value="INTERMEDIATE">Intermediate</option>
+                    <option value="EXPERT">Expert</option>
+                </select>
+                <button type="button" class="btn-danger" onclick="removeSkill(this)">Remove</button>
+            </div>
+        `;
+    }
+
+    // Enhanced employee loading
+    async function loadEmployees() {
+        console.log('📥 Loading employees...');
+        const tableContainer = document.getElementById('employeeTableContainer');
+
+        try {
+            tableContainer.innerHTML = '<div class="loading">Loading employees...</div>';
+
+            const response = await fetch('/api/employees');
+            console.log('📡 Load employees response status:', response.status);
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log('📊 Loaded employees data:', data);
+
+            allEmployees = data;
+            displayEmployees(data);
+
+        } catch (error) {
+            console.error('💥 Error loading employees:', error);
+            tableContainer.innerHTML = `
+                <div class="alert alert-danger">
+                    Error loading employees: ${error.message}
+                    <button onclick="loadEmployees()" style="margin-left: 10px;">Retry</button>
+                </div>
+            `;
+        }
+    }
+
+    function displayEmployees(employees) {
+        const tableContainer = document.getElementById('employeeTableContainer');
+
+        if (!employees || employees.length === 0) {
+            tableContainer.innerHTML = `
+                <div style="text-align: center; padding: 40px; color: #666;">
+                    <h3>No employees found</h3>
+                    <p>Add some employees to get started!</p>
+                </div>
+            `;
+            return;
+        }
+
+        console.log('🎨 Displaying', employees.length, 'employees');
+
+        const table = document.createElement('table');
+        table.id = 'employeeTable';
+        table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Skills</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        `;
+
+        const tbody = table.querySelector('tbody');
+
+        employees.forEach(emp => {
+            const tr = document.createElement('tr');
+
+            // Enhanced skill display with badges
+            let skillsDisplay = '<em style="color: #999;">No skills assigned</em>';
+            if (emp.skills && emp.skills.length > 0) {
+                skillsDisplay = emp.skills.map(s => {
+                    console.log('🎯 Processing skill:', s);
+                    let skillName = 'Unknown';
+                    let proficiency = 'Unknown';
+
+                    if (s.skill && s.skill.name) {
+                        skillName = s.skill.name;
+                    } else if (s.name) {
+                        skillName = s.name;
+                    }
+
+                    if (s.proficiency) {
+                        proficiency = s.proficiency;
+                    }
+
+                    return `<span class="skill-badge">${skillName} (${proficiency})</span>`;
+                }).join(' ');
+            }
+
+            tr.innerHTML = `
+                <td><strong>#${emp.id}</strong></td>
+                <td>${emp.name}</td>
+                <td>${emp.email}</td>
+                <td>${skillsDisplay}</td>
+                <td class="action-buttons">
+                    <button onclick="editEmployee(${emp.id})" class="btn-warning">Edit</button>
+                    <button onclick="manageSkills(${emp.id})" class="btn-success">Skills</button>
+                    <button onclick="deleteEmployee(${emp.id})" class="btn-danger">Delete</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        tableContainer.innerHTML = '';
+        tableContainer.appendChild(table);
+    }
+
+    // Enhanced search functions
+    async function searchBySkill() {
+        const skillName = document.getElementById('skillSearch').value.trim();
+        const proficiency = document.getElementById('proficiencyFilter').value;
+
+        if (!skillName) {
+            showAlert('Please enter a skill name to search', 'danger');
+            return;
+        }
+
+        let url = `/api/employee-skills/by-skill?skill=${encodeURIComponent(skillName)}`;
+        if (proficiency) {
+            url += `&proficiency=${proficiency}`;
+        }
+
+        console.log('🔍 Searching with URL:', url);
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('🎯 Search results:', data);
+
+            // Extract unique employees from the employee skills
+            const employeesMap = new Map();
+            data.forEach(es => {
+                if (es.employee && !employeesMap.has(es.employee.id)) {
+                    const employee = {
+                        id: es.employee.id,
+                        name: es.employee.name,
+                        email: es.employee.email,
+                        skills: []
+                    };
+                    employeesMap.set(es.employee.id, employee);
+                }
+
+                if (es.employee) {
+                    const employee = employeesMap.get(es.employee.id);
+                    employee.skills.push({
+                        id: es.id,
+                        skill: es.skill,
+                        proficiency: es.proficiency
+                    });
+                }
+            });
+
+            const employees = Array.from(employeesMap.values());
+            displayEmployees(employees);
+            showAlert(`Found ${employees.length} employee(s) with skill: ${skillName}`, 'success');
+
+        } catch (error) {
+            console.error('💥 Search error:', error);
+            showAlert(`Error searching by skill: ${error.message}`, 'danger');
+        }
+    }
+
+    async function searchByName() {
+        const name = document.getElementById('nameSearch').value.trim();
+
+        if (!name) {
+            showAlert('Please enter a name to search', 'danger');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/employees/search?name=${encodeURIComponent(name)}`);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+            displayEmployees(data);
+            showAlert(`Found ${data.length} employee(s) matching: ${name}`, 'success');
+
+        } catch (error) {
+            console.error('💥 Search by name error:', error);
+            showAlert(`Error searching by name: ${error.message}`, 'danger');
+        }
+    }
+
+    function showAllEmployees() {
+        displayEmployees(allEmployees);
+        document.getElementById('skillSearch').value = '';
+        document.getElementById('nameSearch').value = '';
+        document.getElementById('proficiencyFilter').value = '';
+        showAlert('Showing all employees', 'success');
+    }
+
+    // Enhanced debug functions
+    async function loadDebugInfo() {
+        const debugContainer = document.getElementById('debugInfo');
+        debugContainer.innerHTML = '<div class="loading">Loading debug information...</div>';
+
+        try {
+            const [employeesRes, skillsRes, employeeSkillsRes] = await Promise.all([
+                fetch('/api/employees'),
+                fetch('/api/skills'),
+                fetch('/api/employee-skills')
+            ]);
+
+            const employees = await employeesRes.json();
+            const skills = await skillsRes.json();
+            const employeeSkills = await employeeSkillsRes.json();
+
+            debugContainer.innerHTML = `
+                <div class="debug-info">
+                    <h4>🔍 System Debug Information</h4>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 15px 0;">
+                        <div style="text-align: center; padding: 15px; background: #e3f2fd; border-radius: 8px;">
+                            <h3 style="margin: 0; color: #1976d2;">${employees.length}</h3>
+                            <p style="margin: 5px 0;">Employees</p>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: #f3e5f5; border-radius: 8px;">
+                            <h3 style="margin: 0; color: #7b1fa2;">${skills.length}</h3>
+                            <p style="margin: 5px 0;">Skills</p>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: #e8f5e8; border-radius: 8px;">
+                            <h3 style="margin: 0; color: #388e3c;">${employeeSkills.length}</h3>
+                            <p style="margin: 5px 0;">Skill Assignments</p>
+                        </div>
+                    </div>
+
+                    <details>
+                        <summary style="cursor: pointer; font-weight: bold;">📊 Employees Data</summary>
+                        <pre style="max-height: 200px; overflow-y: auto;">${JSON.stringify(employees, null, 2)}</pre>
+                    </details>
+
+                    <details>
+                        <summary style="cursor: pointer; font-weight: bold;">🎯 Skills Data</summary>
+                        <pre style="max-height: 200px; overflow-y: auto;">${JSON.stringify(skills, null, 2)}</pre>
+                    </details>
+
+                    <details>
+                        <summary style="cursor: pointer; font-weight: bold;">🔗 Employee Skills Data</summary>
+                        <pre style="max-height: 200px; overflow-y: auto;">${JSON.stringify(employeeSkills, null, 2)}</pre>
+                    </details>
+                </div>
+            `;
+
+        } catch (error) {
+            debugContainer.innerHTML = `
+                <div class="alert alert-danger">
+                    Error loading debug info: ${error.message}
+                    <button onclick="loadDebugInfo()" style="margin-left: 10px;">Retry</button>
+                </div>
+            `;
+        }
+    }
+
+    async function createTestEmployee() {
+        const testData = {
+            name: "Test Employee " + Date.now(),
+            email: "test" + Date.now() + "@example.com",
+            skills: [
+                { name: "Java", proficiency: "EXPERT" },
+                { name: "Spring Boot", proficiency: "INTERMEDIATE" },
+                { name: "JavaScript", proficiency: "BEGINNER" },
+                { name: "React", proficiency: "INTERMEDIATE" }
+            ]
+        };
+
+        console.log('🧪 Creating test employee:', testData);
+
+        try {
+            const response = await fetch('/api/employees', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(testData)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText);
+            }
+
+            const result = await response.json();
+            console.log('✅ Test employee created:', result);
+            showAlert(`Test employee "${testData.name}" created successfully with ${testData.skills.length} skills!`, 'success');
+            await loadEmployees();
+
+        } catch (error) {
+            console.error('💥 Error creating test employee:', error);
+            showAlert(`Error creating test employee: ${error.message}`, 'danger');
+        }
+    }
+
+    async function testSkillCreation() {
+        const testSkill = {
+            name: "Test Skill " + Date.now()
+        };
+
+        try {
+            const response = await fetch('/api/skills', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(testSkill)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText);
+            }
+
+            const result = await response.json();
+            console.log('✅ Test skill created:', result);
+            showAlert(`Test skill "${testSkill.name}" created successfully!`, 'success');
+
+        } catch (error) {
+            console.error('💥 Error creating test skill:', error);
+            showAlert(`Error creating test skill: ${error.message}`, 'danger');
+        }
+    }
+
+    async function clearAllData() {
+        if (!confirm('⚠️ Are you sure you want to delete ALL employees and their skills? This cannot be undone!')) {
+            return;
+        }
+
+        try {
+            // Get all employees first
+            const employeesResponse = await fetch('/api/employees');
+            const employees = await employeesResponse.json();
+
+            // Delete each employee (cascade should handle skills)
+            for (const employee of employees) {
+                await fetch(`/api/employees/${employee.id}`, { method: 'DELETE' });
+            }
+
+            showAlert('All data cleared successfully', 'success');
+            await loadEmployees();
+
+        } catch (error) {
+            console.error('💥 Error clearing data:', error);
+            showAlert(`Error clearing data: ${error.message}`, 'danger');
+        }
+    }
+
+    // Modal and employee management functions
+    function editEmployee(id) {
+        const employee = allEmployees.find(emp => emp.id === id);
+        if (!employee) {
+            showAlert('Employee not found', 'danger');
+            return;
+        }
+
+        document.getElementById('editEmployeeId').value = employee.id;
+        document.getElementById('editName').value = employee.name;
+        document.getElementById('editEmail').value = employee.email;
+
+        document.getElementById('editEmployeeModal').style.display = 'block';
+    }
+
+    function manageSkills(id) {
+        const employee = allEmployees.find(emp => emp.id === id);
+        if (!employee) {
+            showAlert('Employee not found', 'danger');
+            return;
+        }
+
+        document.getElementById('manageEmployeeId').value = employee.id;
+        document.getElementById('currentEmployeeName').innerHTML = `<h4>Managing skills for: <strong>${employee.name}</strong></h4>`;
+
+        displayCurrentSkills(employee.skills);
+        document.getElementById('manageSkillsModal').style.display = 'block';
+    }
+
+    function displayCurrentSkills(skills) {
+        const container = document.getElementById('currentSkillsList');
+        container.innerHTML = '<h4>Current Skills:</h4>';
+
+        if (!skills || skills.length === 0) {
+            container.innerHTML += '<p style="color: #999; font-style: italic;">No skills assigned yet.</p>';
+            return;
+        }
+
+        skills.forEach(skill => {
+            const skillDiv = document.createElement('div');
+            skillDiv.className = 'skillGroup';
+            const skillName = skill.skill ? skill.skill.name : skill.name || 'Unknown';
+            skillDiv.innerHTML = `
+                <span style="font-weight: 600;">${skillName}</span>
+                <select onchange="updateSkillProficiency(${skill.id}, this.value)">
+                    <option value="BEGINNER" ${skill.proficiency === 'BEGINNER' ? 'selected' : ''}>Beginner</option>
+                    <option value="INTERMEDIATE" ${skill.proficiency === 'INTERMEDIATE' ? 'selected' : ''}>Intermediate</option>
+                    <option value="EXPERT" ${skill.proficiency === 'EXPERT' ? 'selected' : ''}>Expert</option>
+                </select>
+                <button onclick="removeSkillFromEmployee(${skill.id})" class="btn-danger">Remove</button>
+            `;
+            container.appendChild(skillDiv);
+        });
+    }
+
+    async function addSkillToEmployee() {
+        const employeeId = document.getElementById('manageEmployeeId').value;
+        const skillName = document.getElementById('newSkillName').value.trim();
+        const proficiency = document.getElementById('newSkillProficiency').value;
+
+        if (!skillName) {
+            showAlert('Please enter a skill name', 'danger');
+            return;
+        }
+
+        const data = {
+            employeeId: parseInt(employeeId),
+            skillName: skillName,
+            proficiency: proficiency
+        };
+
+        console.log('🎯 Adding skill to employee:', data);
+
+        try {
+            const response = await fetch('/api/employee-skills', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText);
+            }
+
+            const result = await response.json();
+            console.log('✅ Skill added successfully:', result);
+            showAlert(`Skill "${skillName}" added successfully!`, 'success');
+            document.getElementById('newSkillName').value = '';
+            await loadEmployees();
+            closeModal('manageSkillsModal');
+
+        } catch (error) {
+            console.error('💥 Error adding skill:', error);
+            showAlert(`Error adding skill: ${error.message}`, 'danger');
+        }
+    }
+
+    async function updateSkillProficiency(skillId, proficiency) {
+        try {
+            const response = await fetch(`/api/employee-skills/${skillId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ proficiency: proficiency })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText);
+            }
+
+            showAlert('Skill proficiency updated successfully!', 'success');
+            await loadEmployees();
+
+        } catch (error) {
+            console.error('💥 Error updating skill:', error);
+            showAlert(`Error updating skill: ${error.message}`, 'danger');
+        }
+    }
+
+    async function removeSkillFromEmployee(skillId) {
+        if (!confirm('Are you sure you want to remove this skill?')) return;
+
+        try {
+            const response = await fetch(`/api/employee-skills/${skillId}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText);
+            }
+
+            showAlert('Skill removed successfully!', 'success');
+            await loadEmployees();
+            closeModal('manageSkillsModal');
+
+        } catch (error) {
+            console.error('💥 Error removing skill:', error);
+            showAlert(`Error removing skill: ${error.message}`, 'danger');
+        }
+    }
+
+    async function deleteEmployee(id) {
+        const employee = allEmployees.find(emp => emp.id === id);
+        const employeeName = employee ? employee.name : `ID ${id}`;
+
+        if (!confirm(`Are you sure you want to delete employee "${employeeName}"? This will also remove all their skills.`)) return;
+
+        try {
+            const response = await fetch(`/api/employees/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText);
+            }
+
+            showAlert(`Employee "${employeeName}" deleted successfully!`, 'success');
+            await loadEmployees();
+
+        } catch (error) {
+            console.error('💥 Error deleting employee:', error);
+            showAlert(`Error deleting employee: ${error.message}`, 'danger');
+        }
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Edit Employee Form Submit
+    document.getElementById('editEmployeeForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const id = document.getElementById('editEmployeeId').value;
+        const name = document.getElementById('editName').value.trim();
+        const email = document.getElementById('editEmail').value.trim();
+
+        if (!name || !email) {
+            showAlert('Name and email are required', 'danger');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/employees/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText);
+            }
+
+            showAlert(`Employee "${name}" updated successfully!`, 'success');
+            closeModal('editEmployeeModal');
+            await loadEmployees();
+
+        } catch (error) {
+            console.error('💥 Error updating employee:', error);
+            showAlert(`Error updating employee: ${error.message}`, 'danger');
+        }
+    });
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+
+    // Initialize application
+    document.addEventListener('DOMContentLoaded', async function() {
+        console.log('🚀 Application starting...');
+
+        // Check connection first
+        await checkConnection();
+
+        // Load initial data
+        await loadEmployees();
+
+        console.log('✅ Application ready!');
+    });
+
+</script>
+
+</body>
+</html>

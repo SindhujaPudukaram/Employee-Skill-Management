@@ -1,0 +1,11 @@
+com\sindhuja\skillmatrix\repository\EmployeeSkillRepository.class
+com\sindhuja\skillmatrix\model\Skill.class
+com\sindhuja\skillmatrix\SkillMatrixApplication.class
+com\sindhuja\skillmatrix\controller\SkillController.class
+com\sindhuja\skillmatrix\repository\SkillRepository.class
+com\sindhuja\skillmatrix\model\Employee.class
+com\sindhuja\skillmatrix\repository\EmployeeRepository.class
+com\sindhuja\skillmatrix\controller\EmployeeController.class
+com\sindhuja\skillmatrix\model\EmployeeSkill.class
+com\sindhuja\skillmatrix\controller\EmployeeSkillController.class
+com\sindhuja\skillmatrix\model\ProficiencyLevel.class
